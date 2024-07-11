@@ -17,7 +17,7 @@ const normalizePort = val => {
   return false;
 };
 
-const port = normalizePort(process.env.PORT || 3000);
+const port = normalizePort(process.env.PORT || '4000');
 app.set('port', port);
 
 // Gestion des erreurs de serveur
@@ -50,4 +50,5 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
+// Écouter sur le port défini
 server.listen(port);

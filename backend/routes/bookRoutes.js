@@ -7,7 +7,7 @@ const multer = require('../middleware/multer-config');
 // Définition des routes
 
 // Créer un nouveau livre
-router.post('/', auth,  multer.upload, multer.optimizeImage, books.createBook);
+router.post('/', auth, multer.upload, multer.optimizeImage, books.createBook);
 
 // Obtenir tous les livres
 router.get('/', auth, books.getAllBook);
@@ -19,6 +19,6 @@ router.get('/:id', auth, books.getOneBook);
 router.put('/:id', auth, multer.upload, multer.optimizeImage, books.updateBook);
 
 // Supprimer un livre
-router.delete('/:id', auth, books.deleteOneBook);
+router.delete('/:id', auth, books.deleteBook);
 
 module.exports = router;

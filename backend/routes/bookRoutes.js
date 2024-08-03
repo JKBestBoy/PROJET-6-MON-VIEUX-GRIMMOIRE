@@ -3,12 +3,11 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const books = require('../controllers/books');
 const multer = require('../middleware/multer-config');
-const resizeImage = require('../middleware/sharp-config.js');
 
 // Définition des routes
 
 // Créer un nouveau livre
-router.post('/', auth, multer, resizeImage, books.createBook);
+router.post('/', auth, multer, books.createBook);
 
 // Obtenir tous les livres
 router.get('/', books.getAllBook);
@@ -21,7 +20,7 @@ router.get('/bestrating', books.getBestRating);
 router.get('/:id', books.getOneBook);
 
 // Mettre à jour un livre
-router.put('/:id', auth, multer, resizeImage, books.modifyBook);
+router.put('/:id', auth, multer, books.modifyBook);
 
 // Supprimer un livre
 router.delete('/:id', auth, books.deleteBook);

@@ -2,8 +2,6 @@ const Book = require('../models/bookModel');
 const fs = require('fs');
 const path = require("path");
 
-
-
 // Crée un livre dans la base de données.
 exports.createBook = (req, res, next) => {
   const bookObject = JSON.parse(req.body.book);
@@ -43,14 +41,12 @@ exports.getOneBook = (req, res, next) => {
     });
 };
 
-
 // Récupère un livre selon sa note
 exports.getBestRating = (req, res, next) => {
   Book.find().sort({ averageRating: -1 }).limit(3)
       .then((books) => res.status(200).json(books))
       .catch(error => res.status(400).json({ error }));
 }
-
 
 // Mettre à jour un livre déjà présent dans la base de données.
 exports.modifyBook = (req, res, next) => {
@@ -75,7 +71,6 @@ exports.modifyBook = (req, res, next) => {
     });
 };
 
-
 // Supprime le livre avec l'_id fourni ainsi que l’image associée.
 exports.deleteBook = (req, res, next) => {
   Book.findOne({ _id: req.params.id })
@@ -96,35 +91,28 @@ exports.deleteBook = (req, res, next) => {
     });
 };
 
-
+// Ajoute une note à un livre et calcule la moyenne d'étoiles
 exports.createRating = (req, res, next) => {
   Book.findOne({ _id: req.params.id })
       .then((book) => {
-          console.log(book, "book log");
-          console.log()
           const oldRating = book.ratings.find((rating) => rating.userId === req.body.userId);
           if (oldRating) {
-              res.status(401).json({ message: 'Livre déjà noté' })
+              res.status(401).json({ message: 'Livre déjà noté' });
           } else {
               book.ratings.push({
                   userId: req.body.userId,
                   grade: req.body.rating
               });
-              const grades = book.ratings.map(element => element.grade)
-              console.log(grades);
+              const grades = book.ratings.map(element => element.grade);
               let gradesSum = grades.reduce((accumulator, currentValue) => {
-                  return accumulator + currentValue
-              }, 0)
+                  return accumulator + currentValue;
+              }, 0);
               let gradesAverage = Math.floor((gradesSum / grades.length));
               book.averageRating = gradesAverage;
-              try {
-                  book.save()
-                      .then((bookrated) => res.status(200).json(bookrated))
-                      .catch(error => res.status(400).json({ error }));
-              }
-              catch { (error) => console.log(error) };
-
+              book.save()
+                  .then((bookrated) => res.status(200).json(bookrated))
+                  .catch(error => res.status(400).json({ error }));
           }
       })
-      .catch(error => res.status(400).json({ error }))
+      .catch(error => res.status(400).json({ error }));
 };
